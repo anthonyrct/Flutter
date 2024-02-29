@@ -12,4 +12,4 @@ class ListaTarefasApp extends StatelessWidget {
       ),
     );
   }
-}
+} 
