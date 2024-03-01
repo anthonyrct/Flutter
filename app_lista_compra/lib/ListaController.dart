@@ -1,16 +1,19 @@
 import 'package:app_lista_compra/ListaModel.dart';
 import 'package:flutter/material.dart';
 
+// Classe responsável por gerenciar o estado da lista de compras usando o Provider
 class ListaController extends ChangeNotifier {
-  //lista de compra
+  // Lista de compras
   List<Listas> _compras = [];
-  //getter para acessar a lista de compras
+
+  // Getter para acessar a lista de compras
   List<Listas> get compras => _compras;
 
-  // Método para adicionar uma nova tarefa à lista
+  // Método para adicionar uma nova compra à lista
   void adicionarCompra(String descricao) {
     if (descricao.trim() != '') {
-      // Convertendo a descrição atual e as descrições existentes na lista para minúsculas
+      // Verifica se a descrição não está vazia
+      // Remove espaços em branco extras e converte para minúsculas para verificar se a compra já existe
       String descricaoMinuscula = descricao.trim().toLowerCase();
       List<String> descricoesExistentes =
           _compras.map((compra) => compra.descricao.toLowerCase()).toList();
@@ -18,13 +21,16 @@ class ListaController extends ChangeNotifier {
       // Verifica se a descrição já existe na lista de compras (em minúsculas)
       bool jaExiste = descricoesExistentes.contains(descricaoMinuscula);
 
-      // Se a compra já existe notifica para o usuario
+      // Se a compra já existe, mostra uma mensagem
       if (jaExiste) {
-        print("essa compra já foi adicionada!");
+        print("Esta compra já foi adicionada!");
         return;
       }
 
-      DateTime dataHoraAtual = DateTime.now(); // Obtém a data e hora atuais
+      // Obtém a data e hora atuais
+      DateTime dataHoraAtual = DateTime.now();
+
+      // Adiciona a nova compra à lista
       _compras.add(Listas(descricao.trim(), false, dataHoraAtual));
 
       // Notifica os ouvintes (widgets) sobre a mudança no estado
@@ -36,9 +42,9 @@ class ListaController extends ChangeNotifier {
   void marcarComoConcluida(int indice) {
     if (indice >= 0 && indice < _compras.length) {
       if (_compras[indice].concluida) {
-        _compras[indice].concluida = false;
+        _compras[indice].concluida = false; // Altera para não concluída
       } else {
-        _compras[indice].concluida = true;
+        _compras[indice].concluida = true; // Altera para concluída
       }
 
       // Notifica os ouvintes sobre a mudança no estado
@@ -55,6 +61,7 @@ class ListaController extends ChangeNotifier {
     }
   }
 
+  // Método para atualizar a quantidade de uma compra com base no índice
   void atualizarQuantidade(int indice, int quantidade) {
     if (indice >= 0 && indice < _compras.length) {
       _compras[indice].quantidade = quantidade;
