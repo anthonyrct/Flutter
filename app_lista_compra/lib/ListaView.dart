@@ -11,7 +11,7 @@ class ListaScreen extends StatelessWidget {
     return Scaffold(
       // Barra superior do aplicativo
       appBar: AppBar(
-        title: Text('Lista de Tarefas'),
+        title: Text('Lista de Compras'),
       ),
       // Corpo principal do aplicativo
       body: Column(
@@ -22,7 +22,7 @@ class ListaScreen extends StatelessWidget {
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(
-                labelText: 'Nova Tarefa',
+                labelText: 'Nova Compra',
 // Ícone para adicionar tarefa ao pressionar o botão
                 suffixIcon: IconButton(
                   onPressed: () {
@@ -47,7 +47,37 @@ class ListaScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return ListTile(
 // Exibição do texto da tarefa
-                      title: Text(model.compras[index].descricao),
+                      title: Row(
+                        children: [
+                          Text(model.compras[index].descricao),
+                          SizedBox(width: 10),
+                          Row(children: [
+                            IconButton(
+                              icon: Icon(Icons.remove),
+                              onPressed: () {
+                                // Reduz a quantidade quando o botão de remoção é pressionado
+                                if (model.compras[index].quantidade > 1) {
+                                  model.atualizarQuantidade(index,
+                                      model.compras[index].quantidade - 1);
+                                }
+                              },
+                            ),
+                            Text(
+                                '${model.compras[index].quantidade}'), // Exibição da quantidade
+                            IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: () {
+                                // Aumenta a quantidade quando o botão de adição é pressionado
+                                model.atualizarQuantidade(
+                                    index, model.compras[index].quantidade + 1);
+                              },
+                            ),
+                          ]),
+                        ],
+                      ),
+                      subtitle: Text(
+                        '${model.compras[index].dataHora.day}/${model.compras[index].dataHora.month}/${model.compras[index].dataHora.year} ${model.compras[index].dataHora.hour}:${model.compras[index].dataHora.minute}',
+                      ),
 // Checkbox para marcar a tarefa como concluída
                       trailing: Checkbox(
                         value: model.compras[index].concluida,
@@ -57,12 +87,14 @@ class ListaScreen extends StatelessWidget {
                           model.marcarComoConcluida(index);
                         },
                       ),
-// Exclui a tarefa ao manter pressionado
-                      onLongPress: () {
-// Chamando o método excluirTarefa do Provider para atualizar o estado
-
-                        model.excluirCompra(index);
-                      },
+                      // Ícone de lixeira para excluir a compra
+                      leading: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          // Chamando o método excluirCompra do Provider para remover a compra da lista
+                          model.excluirCompra(index);
+                        },
+                      ),
                     );
                   },
                 );

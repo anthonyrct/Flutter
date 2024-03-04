@@ -62,9 +62,7 @@ model.marcarComoConcluida(index);
 ),
 // Exclui a tarefa ao manter pressionado
 onLongPress: () {
-// Chamando o método excluirTarefa do Provider
-
-para atualizar o estado
+// Chamando o método excluirTarefa do Provider para atualizar o estado
 
 model.excluirTarefa(index);
 },
