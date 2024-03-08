@@ -12,6 +12,7 @@ class ListaScreen extends StatelessWidget {
       // Barra superior do aplicativo
       appBar: AppBar(
         title: Text('Lista de Compras'),
+        backgroundColor: Colors.red,
       ),
       // Corpo principal do aplicativo
       body: Column(
@@ -75,9 +76,6 @@ class ListaScreen extends StatelessWidget {
                           ]),
                         ],
                       ),
-                      subtitle: Text(
-                        '${model.compras[index].dataHora.day}/${model.compras[index].dataHora.month}/${model.compras[index].dataHora.year} ${model.compras[index].dataHora.hour}:${model.compras[index].dataHora.minute}',
-                      ),
 // Checkbox para marcar a tarefa como concluída
                       trailing: Checkbox(
                         value: model.compras[index].concluida,
@@ -105,4 +103,20 @@ class ListaScreen extends StatelessWidget {
       ),
     );
   }
+  //codigo para fazer o usuario digitar com o teclado(em progresso)
+//   TextField(
+//   controller: _controller,
+//   decoration: InputDecoration(
+//     labelText: 'Nova Tarefa',
+//     suffixIcon: IconButton(
+//       onPressed: () {
+//         _adicionarTarefa();
+//       },
+//       icon: Icon(Icons.add),
+//     ),
+//   ),
+//   onSubmitted: (_) {
+//     _adicionarTarefa();
+//   },
+// ),
 }

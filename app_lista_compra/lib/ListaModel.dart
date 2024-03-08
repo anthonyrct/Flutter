@@ -3,7 +3,7 @@ class Listas {
   //atributos
   String descricao; // Descrição da compra
   bool concluida; // Indica se a compra foi concluída
-  int quantidade; // Quantidade da compra (padrão é 1)
+  int quantidade; // Quantidade da compra (sempre começa em 1)
   DateTime dataHora; // Data e hora da criação da compra
 
 // Construtor da classe com parâmetros para a quantidade, data, Hora, descricao, concluida
