@@ -1,40 +1,33 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp4());
+  runApp(MyApp());
 }
 
-class MyApp4 extends StatelessWidget {
-  final List<String> _tabs = ['Home', 'Profile', 'Settings'];
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Custom Navigation Bar',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: DefaultTabController(
-        length: _tabs.length,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Custom Navigation Bar'),
-            bottom: TabBar(
-              tabs: _tabs.map((String tab) {
-                return Tab(
-                  text: tab,
-                  icon: Icon(Icons.dashboard),
-                );
-              }).toList(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Barra de Navegação Personalizada - Exercicio 4"),
+        ),
+        body: Center(child: Text("Corpo de Navegação")),
+        bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
             ),
-          ),
-          body: TabBarView(
-            children: _tabs.map((String tab) {
-              return Center(
-                child: Text('$tab Content'),
-              );
-            }).toList(),
-          ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Configurações',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Perfil',
+            ),
+          ],
         ),
       ),
     );

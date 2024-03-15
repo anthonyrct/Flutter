@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget{
             child: Row(
               children: [
                 Text('26 anos'),
-                Text('rua jacinto pinto')
+                Text('rua santa eulalia')
               ],
             ),
           )
