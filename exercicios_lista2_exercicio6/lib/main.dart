@@ -9,7 +9,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Menu Deslizante',
-      home: HomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomePage(),
+        '/settings': (context) => SettingsPage(),
+      },
     );
   }
 }
@@ -41,28 +45,45 @@ class HomePage extends StatelessWidget {
               leading: Icon(Icons.home),
               title: Text('Página Inicial'),
               onTap: () {
-                // Implemente a navegação para a página inicial aqui
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Perfil'),
-              onTap: () {
-                // Implemente a navegação para a tela de perfil aqui
+                Navigator.pop(context); // Fechar o Drawer
+                Navigator.pushNamed(
+                    context, '/'); // Navegar para a página inicial
               },
             ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Configurações'),
               onTap: () {
-                // Implemente a navegação para a tela de configurações aqui
+                Navigator.pop(context); // Fechar o Drawer
+                Navigator.pushNamed(context,
+                    '/settings'); // Navegar para a tela de configurações
               },
             ),
           ],
         ),
       ),
       body: Center(
-        child: Text('Conteúdo da Página Principal'),
+        child: Text(
+          'Bem-vindo à página inicial!',
+          style: TextStyle(fontSize: 24),
+        ),
+      ),
+    );
+  }
+}
+
+class SettingsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Configurações'),
+      ),
+      body: Center(
+        child: Text(
+          'Aqui estão as configurações do aplicativo.',
+          style: TextStyle(fontSize: 24),
+        ),
       ),
     );
   }

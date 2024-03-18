@@ -8,13 +8,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cadastro de Usuário',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Cadastro de Usuário'),
-        ),
-        body: RegistrationForm(),
-      ),
+      title: 'Formulário de Cadastro',
+      home: RegistrationForm(),
     );
   }
 }
@@ -25,66 +20,63 @@ class RegistrationForm extends StatefulWidget {
 }
 
 class _RegistrationFormState extends State<RegistrationForm> {
-  final _formKey = GlobalKey<FormState>();
-  String _name = '';
-  String _email = '';
-  String _password = '';
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void _submitForm() {
+    String name = _nameController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    // Enviar os dados do usuario para algum lugar(banco de dados, em progresso)
+
+    print('Nome: $name');
+    print('E-mail: $email');
+    print('Senha: $password');
+
+    // Limpar os campos após enviar o formulário
+    _nameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Formulário de Cadastro'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Nome'),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Por favor, insira seu nome';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                _name = value;
-              },
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: 'Nome',
+              ),
             ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'E-mail'),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Por favor, insira seu e-mail';
-                }
-                // Adicione validação de e-mail aqui, se necessário
-                return null;
-              },
-              onSaved: (value) {
-                _email = value;
-              },
+            SizedBox(height: 20),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'E-mail',
+              ),
             ),
-            SizedBox(height: 16.0),
-            TextFormField(
+            SizedBox(height: 20),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Senha',
+              ),
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Senha'),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Por favor, insira sua senha';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                _password = value;
-              },
             ),
-            SizedBox(height: 32.0),
-            RaisedButton(
-              onPressed: () {
-                _submitForm();
-              },
-              child: Text('Cadastrar'),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _submitForm,
+              child: Text('Enviar'),
             ),
           ],
         ),
@@ -92,15 +84,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
     );
   }
 
-  void _submitForm() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      // Aqui você pode enviar os dados do formulário para algum lugar
-      print('Nome: $_name');
-      print('E-mail: $_email');
-      print('Senha: $_password');
-      // Limpar o formulário após a submissão
-      _formKey.currentState.reset();
-    }
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

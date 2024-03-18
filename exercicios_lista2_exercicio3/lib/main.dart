@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Bottom Navigation Bar Example',
+      title: 'Barra de Navegação',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bottom Navigation Bar Example'),
+        title: Text('Barra de Navegação'),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
