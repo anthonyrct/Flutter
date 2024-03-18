@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-//Anotações:
-//fazer uma função de que quando o usuario clicar, mudar os quadrados(em progresso)
+
 void main() {
   runApp(MyApp());
 }
@@ -9,48 +8,59 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Uso do Stack',
-      home: StackExample(),
+      title: 'Layout com sobreposição',
+      home: OverlayLayout(),
     );
   }
 }
 
-class StackExample extends StatelessWidget {
+class OverlayLayout extends StatefulWidget {
+  @override
+  _OverlayLayoutState createState() => _OverlayLayoutState();
+}
+
+class _OverlayLayoutState extends State<OverlayLayout> {
+  bool _showOverlay = false;
+
+  void _toggleOverlay() {
+    setState(() {
+      _showOverlay = !_showOverlay;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Uso do Stack'),
+        title: Text('Layout com sobreposição'),
       ),
-      body: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Container(
-              color: Colors.blue,
-              width: 200,
-              height: 200,
+      body: Stack(
+        children: [
+          Center(
+            child: ElevatedButton(
+              onPressed: _toggleOverlay,
+              child: Text('Mostrar/Ocultar'),
             ),
-            Positioned(
-              top: 50,
-              left: 50,
+          ),
+          if (_showOverlay)
+            Center(
               child: Container(
-                color: Colors.red,
-                width: 100,
-                height: 100,
+                width: 200,
+                height: 200,
+                color: Colors.blue.withOpacity(0.5),
+                child: Center(
+                  child: Text(
+                    'Sobreposição',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ),
-            Positioned(
-              bottom: 50,
-              right: 50,
-              child: Container(
-                color: Colors.green,
-                width: 150,
-                height: 150,
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

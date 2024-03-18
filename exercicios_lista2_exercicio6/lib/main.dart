@@ -9,10 +9,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Menu Deslizante',
-      initialRoute: '/',
+      initialRoute: '/', // Rota inicial do aplicativo
       routes: {
-        '/': (context) => HomePage(),
-        '/settings': (context) => SettingsPage(),
+        '/': (context) => HomePage(), // Rota para a página inicial
+        '/settings': (context) => SettingsPage(), // Rota para a tela de configurações
       },
     );
   }
@@ -25,11 +25,11 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Menu Deslizante'),
       ),
-      drawer: Drawer(
+      drawer: Drawer( // Definição do Drawer (menu deslizante)
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
+            DrawerHeader( // Cabeçalho do Drawer
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
@@ -42,21 +42,19 @@ class HomePage extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Página Inicial'),
+              leading: Icon(Icons.home), // Ícone à esquerda do título
+              title: Text('Página Inicial'), // Texto do item
               onTap: () {
                 Navigator.pop(context); // Fechar o Drawer
-                Navigator.pushNamed(
-                    context, '/'); // Navegar para a página inicial
+                Navigator.pushNamed(context, '/'); // Navegar para a página inicial
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Configurações'),
+              leading: Icon(Icons.settings), // Ícone à esquerda do título
+              title: Text('Configurações'), // Texto do item
               onTap: () {
                 Navigator.pop(context); // Fechar o Drawer
-                Navigator.pushNamed(context,
-                    '/settings'); // Navegar para a tela de configurações
+                Navigator.pushNamed(context, '/settings'); // Navegar para a tela de configurações
               },
             ),
           ],
@@ -64,7 +62,7 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: Text(
-          'Bem-vindo à página inicial!',
+          'Bem-vindo à página inicial!', // Corpo da página inicial
           style: TextStyle(fontSize: 24),
         ),
       ),
@@ -77,11 +75,11 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Configurações'),
+        title: Text('Configurações'), // Título da tela de configurações
       ),
       body: Center(
         child: Text(
-          'Aqui estão as configurações do aplicativo.',
+          'Aqui estão as configurações do aplicativo.', // Corpo da tela de configurações
           style: TextStyle(fontSize: 24),
         ),
       ),

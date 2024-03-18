@@ -8,78 +8,98 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Personalização de Botões',
-      home: ButtonExample(),
+      title: 'Formulário de Cadastro', // Título do aplicativo
+      home: RegistrationForm(), // Define a página inicial como RegistrationForm
     );
   }
 }
 
-class ButtonExample extends StatefulWidget {
+class RegistrationForm extends StatefulWidget {
   @override
-  _ButtonExampleState createState() => _ButtonExampleState();
+  _RegistrationFormState createState() => _RegistrationFormState();
 }
 
-class _ButtonExampleState extends State<ButtonExample> {
-  int _counter = 0;
+class _RegistrationFormState extends State<RegistrationForm> {
+  // Controladores para os campos de texto
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  // Função para enviar o formulário
+  void _submitForm() {
+    // Obter os valores dos campos de texto
+    String name = _nameController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    // Enviar os dados do usuário para algum lugar (em progresso)
+
+    // Exibir os dados no console
+    print('Nome: $name');
+    print('E-mail: $email');
+    print('Senha: $password');
+
+    // Limpar os campos após enviar o formulário
+    _nameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Personalização de Botões'),
+        title: Text('Formulário de Cadastro'), // Título da barra de aplicativos
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Você clicou $_counter vezes.',
-              style: TextStyle(
-                fontSize: 20,
-                color: _counter % 2 == 0 ? Colors.blue : Colors.green, // Alterna a cor do texto com base no número de cliques
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Campo de texto para o nome
+            TextField(
+              controller: _nameController, // Controlador para o campo de texto
+              decoration: InputDecoration(
+                labelText: 'Nome', // Rótulo do campo de texto
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 20), // Espaçamento entre os campos de texto
+            // Campo de texto para o e-mail
+            TextField(
+              controller: _emailController, // Controlador para o campo de texto
+              decoration: InputDecoration(
+                labelText: 'E-mail', // Rótulo do campo de texto
+              ),
+            ),
+            SizedBox(height: 20), // Espaçamento entre os campos de texto
+            // Campo de texto para a senha
+            TextField(
+              controller:
+                  _passwordController, // Controlador para o campo de texto
+              decoration: InputDecoration(
+                labelText: 'Senha', // Rótulo do campo de texto
+              ),
+              obscureText: true, // Para ocultar a senha
+            ),
+            SizedBox(height: 20), // Espaçamento entre os campos de texto
+            // Botão para enviar o formulário
             ElevatedButton(
-              onPressed: () {
-                _incrementCounter();
-              },
-              child: Text('ElevatedButton'),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Colors.red, // Cor do texto do botão
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Espaçamento interno do botão
-              ),
-            ),
-            SizedBox(height: 20),
-            TextButton(
-              onPressed: () {
-                _incrementCounter();
-              },
-              child: Text('TextButton'),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.blue, // Cor do texto do botão
-              ),
-            ),
-            SizedBox(height: 20),
-            OutlinedButton(
-              onPressed: () {
-                _incrementCounter();
-              },
-              child: Text('OutlinedButton'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.green, side: BorderSide(color: Colors.green), // Borda do botão
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Espaçamento interno do botão
-              ),
+              onPressed:
+                  _submitForm, // Função chamada quando o botão é pressionado
+              child: Text('Enviar'), // Texto do botão
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // Dispose dos controladores quando o widget for destruído para evitar vazamentos de memória
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
