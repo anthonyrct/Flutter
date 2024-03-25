@@ -1,5 +1,5 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,96 +9,65 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Lista com SharedP",
-        theme: ThemeData(primarySwatch: Colors.blue),
-        home: TaskList());
+      theme: ThemeData(
+        brightness: Brightness.light, // Define o tema claro como padrão
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark, // Define o tema escuro
+      ),
+      home: HomePage(),
+    );
   }
 }
 
-class TaskList extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _TaskListState createState() => _TaskListState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _TaskListState extends State<TaskList> {
-  List<String> tasks = []; // Lista de tarefas
-  final TextEditingController _controller =
-      TextEditingController(); // Controlador de texto para o campo de entrada de nova tarefa
+class _HomePageState extends State<HomePage> {
+  late SharedPreferences _prefs;
+  bool _darkMode = false;
 
   @override
   void initState() {
     super.initState();
-    loadTasks(); // Carrega as tarefas ao iniciar a tela
+    _loadPreferences();
   }
 
-  Future<void> loadTasks() async {
-    SharedPreferences prefs = await SharedPreferences
-        .getInstance(); // Obtém as preferências compartilhadas
+  Future<void> _loadPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
     setState(() {
-      tasks = prefs.getStringList('tasks') ??
-          []; // Carrega as tarefas armazenadas ou uma lista vazia se não houver tarefas
+      _darkMode = _prefs.getBool('darkMode') ?? false;
     });
   }
 
-  Future<void> saveTasks() async {
-    SharedPreferences prefs = await SharedPreferences
-        .getInstance(); // Obtém as preferências compartilhadas
-    await prefs.setStringList('tasks',
-        tasks); // Salva a lista de tarefas nas preferências compartilhadas
+  Future<void> _toggleDarkMode() async {
+    setState(() {
+      _darkMode = !_darkMode;
+    });
+    await _prefs.setBool('darkMode', _darkMode);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Lista de Tarefas'), // Título da barra de aplicativos
-      ),
-      body: ListView.builder(
-        itemCount: tasks.length, // Número de itens na lista de tarefas
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(tasks[index]), // Título do item da lista
-            onLongPress: () {
-              setState(() {
-                tasks.removeAt(index); // Remove a tarefa da lista
-                saveTasks(); // Salva as tarefas atualizadas
-              });
+    return AnimatedTheme(
+      data: _darkMode
+          ? ThemeData.dark()
+          : ThemeData.light(), // Define o tema com base no modo escuro
+      duration: Duration(milliseconds: 500), // Define a duração da transição
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Armazenamento Interno'),
+        ),
+        body: Center(
+          child: Switch(
+            value: _darkMode,
+            onChanged: (value) {
+              _toggleDarkMode();
             },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Nova Tarefa'), // Título do diálogo de nova tarefa
-                content: TextField(
-                  controller:
-                      _controller, // Controlador de texto para o campo de entrada
-                  decoration: InputDecoration(
-                      hintText: 'Digite a tarefa'), // Dica no campo de entrada
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        tasks.add(
-                            _controller.text); // Adiciona a nova tarefa à lista
-                        saveTasks(); // Salva as tarefas atualizadas
-                        _controller.clear(); // Limpa o campo de entrada
-                        Navigator.of(context).pop(); // Fecha o diálogo
-                      });
-                    },
-                    child: Text('Adicionar'), // Botão para adicionar a tarefa
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        child: Icon(Icons.add), // Ícone do botão de adicionar
+          ),
+        ),
       ),
     );
   }
