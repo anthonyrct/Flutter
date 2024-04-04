@@ -3,6 +3,9 @@ class ContactModel {
   String name;
   String email;
   String senha;
+  String tema;
+  String idioma;
+  String fonte;
 
   ContactModel({
     required this.id,
