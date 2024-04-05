@@ -12,6 +12,9 @@ class ContactModel {
     required this.name,
     required this.email,
     required this.senha,
+    required this.tema,
+    required this.fonte,
+    required this.idioma
   });
 
   // Método para converter um contato para um mapa (para salvar no banco de dados)
@@ -21,6 +24,9 @@ class ContactModel {
       'name': name,
       'email': email,
       'senha': senha,
+      'tema': tema,
+      'fonte': fonte,
+      'idioma': idioma,
     };
   }
 
@@ -31,6 +37,9 @@ class ContactModel {
       name: map['name'],
       email: map['email'],
       senha: map['senha'],
+      tema: map['tema'],
+      fonte: map['fonte'],
+      idioma: map['idioma'],
     );
   }
 }
