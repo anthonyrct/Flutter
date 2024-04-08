@@ -38,7 +38,8 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      drawer: Drawer( // drawer
+      drawer: Drawer(
+        // drawer
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -224,14 +225,44 @@ class _HomePageState extends State<HomePage> {
 
   // Método para adicionar um novo contato ao banco de dados
   void _addContact() {
+    // Verifique se todos os campos estão preenchidos
+    if (_idController.text.isEmpty ||
+        _nameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _senhaController.text.isEmpty ||
+        _temaController.text.isEmpty ||
+        _idiomaController.text.isEmpty ||
+        _fonteController.text.isEmpty) {
+      // Exiba um diálogo de alerta informando ao usuário que todos os campos devem ser preenchidos
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Erro de Cadastro'),
+            content: Text('Por favor, preencha todos os campos.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return; // Encerre o método sem continuar
+    }
+
+    // Se todos os campos estiverem preenchidos, continue com a adição do contato
     final newContact = ContactModel(
       id: int.parse(_idController.text),
       name: _nameController.text,
       email: _emailController.text,
       senha: _senhaController.text,
       tema: _temaController.text,
-      idioma: _idiomaController.text, // Corrigido
-      fonte: _fonteController.text, // Corrigido
+      idioma: _idiomaController.text,
+      fonte: _fonteController.text,
     );
 
     dbHelper.create(newContact);

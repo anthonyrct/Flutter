@@ -55,16 +55,22 @@ class _SettingsPageState extends State<SettingsPage> {
           onChanged: (value) {
             setState(() {
               _darkMode = value!;
-             try{
-              if(option == _darkMode){
-                MaterialApp(
-                  theme: ThemeData.dark(),
+            //  try{
+            //   if(option == _darkMode){
+            //     MaterialApp(
+            //       theme: ThemeData.dark().copyWith(
+            //         textTheme: ThemeData.dark().textTheme.apply(
+            //           bodyColor: Colors.white,
+            //         ),
+            //       ),
                   
-                )
-              }
-             }catch{
+            //     );
+            //   }else {
+                
+            //   }
+            //  }catch{
 
-             }
+            //  }
             });
           },
         );
