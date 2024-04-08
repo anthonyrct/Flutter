@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      drawer: Drawer( // Adicione o Drawer aqui
+      drawer: Drawer( // drawer
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -58,6 +58,10 @@ class _HomePageState extends State<HomePage> {
               title: Text('Cadastro'),
               onTap: () {
                 // Navegue para a página de cadastro
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
               },
             ),
             ListTile(

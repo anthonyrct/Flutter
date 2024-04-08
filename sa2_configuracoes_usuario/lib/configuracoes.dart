@@ -55,7 +55,16 @@ class _SettingsPageState extends State<SettingsPage> {
           onChanged: (value) {
             setState(() {
               _darkMode = value!;
-              // Implemente a lógica para aplicar o tema do aplicativo aqui
+             try{
+              if(option == _darkMode){
+                MaterialApp(
+                  theme: ThemeData.dark(),
+                  
+                )
+              }
+             }catch{
+
+             }
             });
           },
         );
