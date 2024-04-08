@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sa2_configuracoes_usuario/DataBaseController.dart';
+import 'Login.dart';
 import 'Model.dart';
+import 'configuracoes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -35,6 +37,51 @@ class _HomePageState extends State<HomePage> {
             },
           )
         ],
+      ),
+      drawer: Drawer( // Adicione o Drawer aqui
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('Cadastro'),
+              onTap: () {
+                // Navegue para a página de cadastro
+              },
+            ),
+            ListTile(
+              title: Text('Login'),
+              onTap: () {
+                // Navegue para a página de login
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Configurações'),
+              onTap: () {
+                // Navegue para a página de configurações
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: FutureBuilder<List<ContactModel>>(
         future: dbHelper.getContacts(),
