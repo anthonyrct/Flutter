@@ -7,7 +7,7 @@ class DatabaseHelper {
   static const String DATABASE_NAME = 'usuario.db';
   static const String TABLE_NAME = 'configuracoes';
   static const String CREATE_CONFIGURACOES_TABLE_SCRIPT =
-      "CREATE TABLE configuracoes(id SERIAL PRIMARY KEY," +
+      "CREATE TABLE configuracoes(id INT PRIMARY KEY," +
           "name TEXT, email TEXT, senha TEXT," +
           "tema TEXT, idioma TEXT, fonte TEXT)";
   Future<Database> _getDatabase() async {
@@ -79,4 +79,12 @@ class DatabaseHelper {
       return;
     }
   }
+
+
+  Future<ContactModel?> getUserByEmail(String email) async {
+  final Database db = await _getDatabase();
+  var res = await db.query('contacts', where: 'email = ?', whereArgs: [email]);
+  return res.isNotEmpty ? ContactModel.fromMap(res.first) : null;
+}
+
 }

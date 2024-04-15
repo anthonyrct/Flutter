@@ -20,9 +20,6 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _senhaController = TextEditingController();
-  TextEditingController _temaController = TextEditingController();
-  TextEditingController _idiomaController = TextEditingController();
-  TextEditingController _fonteController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +137,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Método para exibir um diálogo para adicionar um novo contato
   void _showAddContactDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -161,9 +157,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter an ID';
-                    } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                      return 'Please enter a valid ID (only digits allowed)';
+                      return 'Por favor, insira um ID';
                     }
                     return null;
                   },
@@ -173,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: InputDecoration(labelText: 'Nome'),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Porfavor, insira um nome';
+                      return 'Por favor, insira um nome';
                     }
                     return null;
                   },
@@ -183,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: InputDecoration(labelText: 'Email'),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Porfavor, insira um email';
+                      return 'Por favor, insira um email';
                     }
                     return null;
                   },
@@ -191,9 +185,10 @@ class _HomePageState extends State<HomePage> {
                 TextFormField(
                   controller: _senhaController,
                   decoration: InputDecoration(labelText: 'Senha'),
+                  obscureText: true,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Porfavor, insira uma senha';
+                      return 'Por favor, insira uma senha';
                     }
                     return null;
                   },
@@ -206,7 +201,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('cancelar'),
+              child: Text('Cancelar'),
             ),
             TextButton(
               onPressed: () {
@@ -223,16 +218,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Método para adicionar um novo contato ao banco de dados
-  void _addContact() {
+  void _addContact() async {
     // Verifique se todos os campos estão preenchidos
     if (_idController.text.isEmpty ||
         _nameController.text.isEmpty ||
         _emailController.text.isEmpty ||
-        _senhaController.text.isEmpty ||
-        _temaController.text.isEmpty ||
-        _idiomaController.text.isEmpty ||
-        _fonteController.text.isEmpty) {
+        _senhaController.text.isEmpty) {
       // Exiba um diálogo de alerta informando ao usuário que todos os campos devem ser preenchidos
       showDialog(
         context: context,
@@ -254,15 +245,40 @@ class _HomePageState extends State<HomePage> {
       return; // Encerre o método sem continuar
     }
 
-    // Se todos os campos estiverem preenchidos, continue com a adição do contato
+    // Verifique se o usuário já existe
+    final existingUser = await dbHelper.getUserByEmail(_emailController.text);
+    if (existingUser != null) {
+      // Exiba uma mensagem informando que o usuário já existe
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Erro de Cadastro'),
+            content: Text(
+                'Este e-mail já está em uso. Por favor, use outro e-mail.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return; // Encerre o método sem continuar
+    }
+
+    // Se todos os campos estiverem preenchidos e o usuário não existir, continue com a adição do contato
     final newContact = ContactModel(
       id: int.parse(_idController.text),
       name: _nameController.text,
       email: _emailController.text,
       senha: _senhaController.text,
-      tema: _temaController.text,
-      idioma: _idiomaController.text,
-      fonte: _fonteController.text,
+      tema: '',
+      fonte: '',
+      idioma: '',
     );
 
     dbHelper.create(newContact);
@@ -317,7 +333,8 @@ class _HomePageState extends State<HomePage> {
             children: [
               Text('Nome: ${contact.name}'),
               Text('Email: ${contact.email}'),
-              // Adicione mais informações conforme necessário
+              Text('Senha: ${contact.senha}'),
+              Text('Id: ${contact.id}'),
             ],
           ),
           actions: <Widget>[

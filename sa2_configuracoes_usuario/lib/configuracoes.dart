@@ -1,4 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SettingsPage(),
+    );
+  }
+}
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -6,19 +21,9 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  // Variáveis para controlar as configurações
-  bool _darkMode = false;
-  double _fontSize = 16.0;
-  Locale? _selectedLocale;
-
-  // Opções para cada configuração
-  final List<bool> _darkModeOptions = [false, true];
-  final List<double> _fontSizeOptions = [14.0, 16.0, 18.0];
-  final List<Locale> _languageOptions = [
-    Locale('en', 'US'), // Inglês
-    Locale('es', 'ES'), // Espanhol
-    Locale('pt', 'BR'), // Português
-  ];
+  double _fontSize = 16.0; // Tamanho da fonte padrão
+  String _language = 'Português'; // Idioma padrão
+  bool _darkTheme = false; // Tema padrão
 
   @override
   Widget build(BuildContext context) {
@@ -29,88 +34,94 @@ class _SettingsPageState extends State<SettingsPage> {
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Tema', style: Theme.of(context).textTheme.subtitle1),
-            _buildThemeOptions(),
-            SizedBox(height: 16.0),
-            Text('Tamanho da Fonte', style: Theme.of(context).textTheme.subtitle1),
-            _buildFontSizeOptions(),
-            SizedBox(height: 16.0),
-            Text('Idioma', style: Theme.of(context).textTheme.subtitle1),
-            _buildLanguageOptions(),
+            Slider(
+              value: _fontSize,
+              min: 10,
+              max: 30,
+              onChanged: (newValue) {
+                setState(() {
+                  _fontSize = newValue;
+                });
+              },
+            ),
+            DropdownButton<String>(
+              value: _language,
+              onChanged: (newValue) {
+                setState(() {
+                  _language = newValue!;
+                });
+              },
+              items: ['Português', 'Inglês', 'Espanhol']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            SwitchListTile(
+              title: Text('Tema escuro'),
+              value: _darkTheme,
+              onChanged: (newValue) {
+                setState(() {
+                  _darkTheme = newValue;
+                });
+              },
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _showSaveConfirmationDialog(context);
+              },
+              child: Text('Salvar'),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildThemeOptions() {
-    return Column(
-      children: _darkModeOptions.map((option) {
-        return RadioListTile(
-          title: Text(option ? 'Escuro' : 'Claro'),
-          value: option,
-          groupValue: _darkMode,
-          onChanged: (value) {
-            setState(() {
-              _darkMode = value!;
-            //  try{
-            //   if(option == _darkMode){
-            //     MaterialApp(
-            //       theme: ThemeData.dark().copyWith(
-            //         textTheme: ThemeData.dark().textTheme.apply(
-            //           bodyColor: Colors.white,
-            //         ),
-            //       ),
-                  
-            //     );
-            //   }else {
-                
-            //   }
-            //  }catch{
-
-            //  }
-            });
-          },
+  void _showSaveConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Salvar configurações?'),
+          content: Text('Tem certeza que deseja salvar as configurações?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Sim'),
+              onPressed: () {
+                _saveSettings();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
-      }).toList(),
+      },
     );
   }
 
-  Widget _buildFontSizeOptions() {
-    return Column(
-      children: _fontSizeOptions.map((option) {
-        return RadioListTile(
-          title: Text(option.toString()),
-          value: option,
-          groupValue: _fontSize,
-          onChanged: (value) {
-            setState(() {
-              _fontSize = value!;
-              // Implemente a lógica para aplicar o tamanho da fonte do aplicativo aqui
-            });
-          },
-        );
-      }).toList(),
-    );
-  }
+  void _saveSettings() async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, 'settings.db');
+    Database database = await openDatabase(path, version: 1,
+        onCreate: (Database db, int version) async {
+      await db.execute(
+          'CREATE TABLE IF NOT EXISTS settings (id INTEGER PRIMARY KEY, fontSize REAL, language TEXT, darkTheme INTEGER)');
+    });
 
-  Widget _buildLanguageOptions() {
-    return Column(
-      children: _languageOptions.map((option) {
-        return RadioListTile(
-          title: Text(option.languageCode.toUpperCase()),
-          value: option,
-          groupValue: _selectedLocale,
-          onChanged: (value) {
-            setState(() {
-              _selectedLocale = value;
-              // Implemente a lógica para aplicar o idioma do aplicativo aqui
-            });
-          },
-        );
-      }).toList(),
-    );
+    // Salva as configurações no banco de dados
+    await database.transaction((txn) async {
+      await txn.rawInsert(
+          'INSERT OR REPLACE INTO settings(id, fontSize, language, darkTheme) VALUES(1, $_fontSize, "$_language", ${_darkTheme ? 1 : 0})');
+    });
   }
 }
