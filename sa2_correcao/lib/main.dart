@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'View.dart';
+import 'View/LoginPageView.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -12,10 +12,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "SA2 -  Salvando configurações do usuario",
+      title: "SA2",
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      home: PaginaLogin(),
     );
   }
 }
