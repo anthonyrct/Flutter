@@ -1,4 +1,3 @@
-
 import 'package:path/path.dart';
 import 'package:sa2_correcao/Model/Usuario.dart';
 import 'package:sqflite/sqflite.dart';

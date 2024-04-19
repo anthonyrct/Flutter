@@ -43,7 +43,7 @@ class _PaginaHomeState extends State<PaginaHome> {
         _darkMode); // Salva o estado do tema escuro nas preferências compartilhadas
   }
 
-  Future<void> _mudarIdioma() async {
+  Future<void> _mudarIdioma(ValueKey<String?> valueKey) async {
     setState(() {
       //
     });
