@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../Controller/BancoDadosSQLite.dart';
 import '../Model/Usuario_Model.dart';
 import 'PaginaCadastro.dart';
-import 'HomePageView.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
