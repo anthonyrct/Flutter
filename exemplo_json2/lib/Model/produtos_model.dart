@@ -26,7 +26,7 @@ class Produto {
     nome: json['nome'],
     preco: json['preco'],
     categoria: json['categoria'],
-    foto: : json['foto'],
+    foto: json['foto'],
   );
   }
 }

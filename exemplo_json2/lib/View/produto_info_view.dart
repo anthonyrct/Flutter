@@ -1,24 +1,24 @@
-import 'package:exemplo_json2/Model/produtos_model.dart';
 import 'package:flutter/material.dart';
+import 'package:exemplo_json2/Model/produtos_model.dart';
 
-import '../Model/produtos_model.dart';
-
-class ProdutoInfoPage extends StatelessWidget {
-  Produto produto;
-  ProdutoInfoPage({required this.produto});
+class ProdutoInfoScreen extends StatelessWidget {
+  Produto info;
+  ProdutoInfoScreen({required this.info});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Produto Info'),
+        title: Text('Info Produto: ${info.nome}'),
       ),
-      body: Center(
+      body: Padding(
+        padding: EdgeInsets.all(12),
         child: Column(
           children: [
-            Text(produto.nome),
-            Text('${produto.preco.toStringAsFixed(2)}'),
-            Text(produto.categoria),
+            Image.asset(info.foto),
+            Text(info.nome),
+            Text('${info.preco}'),
+            Text(info.categoria),
           ],
         ),
       ),
