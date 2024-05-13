@@ -108,18 +108,18 @@ class _FilmeCadastroScreenState extends State<FilmeCadastroScreen> {
                   )
                   : SizedBox.shrink(),
                   ElevatedButton(
-                    onPressed: _tirarfoto,
+                    onPressed: _tirarfoto, child: null,
                   ),
-                  // TextFormField(
-                  // decoration: const InputDecoration(hintText: "imagem do Filme"),
-                  // controller: _nomeController,
-                  // validator: (value) {
-                  //   if (value!.trim().isEmpty) {
-                  //     return "imagem do Filme deve ser Preenchido";
-                  //   } else {
-                  //     return null;
-                  //   }
-                  // }),
+                   TextFormField(
+                   decoration: const InputDecoration(hintText: "imagem do Filme"),
+                  controller: _nomeController,
+                  validator: (value) {
+                    if (value!.trim().isEmpty) {
+                      return "imagem do Filme deve ser Preenchido";
+                    } else {
+                      return null;
+                    }
+                  }),
               ElevatedButton(
                 onPressed: () => {
                   if(_formkey.currentState!.validate()){
