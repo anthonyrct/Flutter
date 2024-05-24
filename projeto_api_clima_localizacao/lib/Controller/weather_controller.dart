@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:projeto_api_clima_localizacao/Service/weather_service.dart';
 
 import '../Model/weather_model.dart';
@@ -16,4 +18,12 @@ class WeatherController {
     Weather weather = Weather.fromJson(await _service.getWeatherByLocation(lat, lon));
     listWeather.add(weather);
   }
+  Future<bool> findCity(String city) async {
+    Weather weather = Weather.fromJson(await _service.getWeather(city));
+    if(weather.city.isNotEmpty){
+      return true;
+    }else {
+      return false;
+    }
+}
 }
