@@ -15,7 +15,7 @@ class AuthFirebase {
     }
   }
   //metodo login
-   Future<User?> signin(String email, String password) async {
+   Future<User?> signIn(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(
           email: email, password: password);

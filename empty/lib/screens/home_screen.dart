@@ -12,9 +12,24 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Home'),
       ),
       body: Center(
-        child: Text('Home'),
-        
-      ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');
+              },
+              child: Text('Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/registro');
+              },
+              child: const Text('Registro'),
+            ),
+          ],
+        ),
+      )
     );
   }
 }
