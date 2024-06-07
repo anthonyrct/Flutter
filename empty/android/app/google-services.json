@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "740683084689",
+    "project_id": "teste-exemplo-firebase",
+    "storage_bucket": "teste-exemplo-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740683084689:android:019ba78769ab335dbea030",
+        "android_client_info": {
+          "package_name": "br.com.anthonytb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "740683084689-qru92c6r0ehm7p35mlj83pn4kj1857fj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHmXaaqYztlnnhM7i5XKMZ6-AHWTC8h9M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "740683084689-qru92c6r0ehm7p35mlj83pn4kj1857fj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
