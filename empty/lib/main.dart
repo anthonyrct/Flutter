@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Teste firebase app',
       home: HomeScreen(),
       routes: {
+        '/home':(context) => const HomeScreen(), 
         '/login' :(context) => const LoginScreen(),
         '/registro' :(context) => const RegistroScreen(),
       },

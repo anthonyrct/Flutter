@@ -1,16 +1,43 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class TodolistScreen extends StatefulWidget {
-  const TodolistScreen({super.key});
+class AuthService {
+  //construir o login do usuario
+   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  @override
-  State<TodolistScreen> createState() => _TodolistScreenState();
-}
-
-class _TodolistScreenState extends State<TodolistScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+   //login do usuario
+   Future<User?> signInWithEmail(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+        email: email, 
+        password: password
+        );
+      User? user = result.user;
+      return user;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
+
+  //create a new user
+  Future<void> registerWithEmail(String email, String password) async {
+    try {
+      await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password
+         );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+  
+  //logout do usuario
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
 }

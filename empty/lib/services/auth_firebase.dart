@@ -1,37 +1,43 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 
-class AuthFirebase {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class AuthService {
+  //construir o login do usuario
+   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  //metodos Registro
-  Future<void> signUp(String email, String password) async {
+   //login do usuario
+   Future<User?> signInWithEmail(String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-  //metodo login
-   Future<User?> signIn(String email, String password) async {
-    try {
-      await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-          return _auth.currentUser;
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+        email: email, 
+        password: password
+        );
+      User? user = result.user;
+      return user;
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
-  //logout
+
+  //create a new user
+  Future<void> registerWithEmail(String email, String password) async {
+    try {
+      await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password
+         );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+  
+  //logout do usuario
   Future<void> signOut() async {
     try {
       await _auth.signOut();
     } catch (e) {
       print(e.toString());
     }
-  
-}
+  }
+
 }

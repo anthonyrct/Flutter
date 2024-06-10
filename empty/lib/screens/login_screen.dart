@@ -1,8 +1,10 @@
-import 'package:empty/services/auth_firebase.dart';
+import 'package:empty/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'todolist_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,66 +14,79 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final AuthFirebase _authFirebase = AuthFirebase();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  final AuthService _authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
+      body:Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Insira um email';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Senha',
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(labelText: 'Senha'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Insira uma senha';
+                    }
+                    return null;
+                  },
+                  obscureText: true,
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    await _authFirebase.signIn(
-                        _emailController.text, _passwordController.text);
-                    Navigator.pushReplacementNamed(context, '/home');
-                  }
-                },
-                child: const Text('Entrar'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/cadastro');
-                },
-                child: const Text('Cadastrar'),
-              ),
-            ],
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: (){_validarLogin();},
+                  child: const Text("Logar"),)
+              ],
+            ),
           ),
         ),
-      ),
+      )
     );
   }
-
-  Future<void> _LoginUsuario() async {
+  
+  Future<void> _validarLogin() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       try {
-        User? user = await _authFirebase.signIn(
-            _emailController.text, _passwordController.text);
-        Navigator.pushReplacementNamed(context, '/home');
+        User? user = await _authService.signInWithEmail(
+          _emailController.text,
+          _passwordController.text,
+        );
+        if (user != null){
+        Navigator.pushReplacement(
+          context, 
+          MaterialPageRoute(
+            builder: (context)=>Todolist_screen(user:user)));}
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Usuário ou senha inválidos"),
+            ),
+          );
+        }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -1,7 +1,10 @@
-import 'package:empty/services/auth_firebase.dart';
+import 'package:empty/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'todolist_screen.dart';
 
 class RegistroScreen extends StatefulWidget {
   const RegistroScreen({super.key});
@@ -11,81 +14,79 @@ class RegistroScreen extends StatefulWidget {
 }
 
 class _RegistroScreenState extends State<RegistroScreen> {
-  final AuthFirebase _authFirebase = AuthFirebase();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //criar tela de registro
-        appBar: AppBar(
-          title: Text('Registro'),
-        ),
-        body: Padding(
-            padding: EdgeInsets.all(8),
-            child: Center(
-              child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextFormField(
+      // tela de registro com confirmação de senha
+      body: Padding(
+        padding: EdgeInsets.all(12),
+        child: Center(
+          child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                  //campos do form
+                  children: <Widget>[
+                    TextFormField(
                         controller: _emailController,
-                        decoration: const InputDecoration(hintText: 'Email'),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Insira um email';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'E-mail',
+                        ),
+                        validator: (value) {}),
+                    TextFormField(
                         controller: _passwordController,
-                        decoration: const InputDecoration(hintText: 'Senha'),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Insira uma senha';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Senha',
+                        ),
+                        validator: (value) {}),
+                    TextFormField(
                         controller: _confirmPasswordController,
-                        decoration:
-                            const InputDecoration(hintText: 'Confirmar Senha'),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Insira uma senha';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          _registrarUsuario();
-                        },
-                        child: Text('Registrar'),
-                      ),
-                    ],
-                  )),
-            )));
+                        decoration: const InputDecoration(
+                          labelText: 'Confirmar Senha',
+                        ),
+                        validator: (value) {}),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        _registrar();
+                      },
+                      child: Text('Registrar'),
+                    ),
+                  ])),
+        ),
+      ),
+    );
   }
 
-  Future <void> _registrarUsuario() async {
-    if (_formKey.currentState!.validate() && _passwordController.text == _confirmPasswordController.text) {
-      try {
-        await _authFirebase.signUp(_emailController.text,
-            _passwordController.text);
-        Navigator.pushReplacementNamed(context, '/login');
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(e.toString()),
-        ));
+  Future<void> _registrar() async {
+    if (_confirmPasswordController.text == _passwordController.text) {
+      if (_formKey.currentState!.validate()) {
+        _authService.registerWithEmail(
+            _emailController.text, _confirmPasswordController.text);
+            Navigator.pushNamed(context, '/login');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Preencha todos os campos'),
+          ),
+        );
+        return null;
       }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Senhas não conferem'),
+        ),
+      );
+      return null;
     }
   }
 }
