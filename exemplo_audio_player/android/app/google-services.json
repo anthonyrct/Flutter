@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "112644235437",
+    "project_id": "teste-firebase-tarde-anthony",
+    "storage_bucket": "teste-firebase-tarde-anthony.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112644235437:android:7c20fd4135078facdb2624",
+        "android_client_info": {
+          "package_name": "web.com.br.anthony"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1ajx6IwifjLw5sRTyKMC4CUti3-DMXMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
