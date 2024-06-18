@@ -1,5 +1,5 @@
-import 'package:exemplo_audio_player/audioplayers.dart';
-import 'package:exemplo_audio_player/model/audio_model.dart'; // Adicionando importação do AudioModel
+import 'package:audioplayers/audioplayers.dart';
+import 'package:exemplo_audio_player/models/audio_model.dart'; // Adicionando importação do AudioModel
 import 'package:flutter/material.dart';
 
 class AudioScreen extends StatefulWidget {
@@ -20,11 +20,11 @@ class _AudioScreenState extends State<AudioScreen> {
   void initState() {
     super.initState();
     _player = AudioPlayer();
-    _player.play(widget.audio.url);
+    _player.play(widget.audio.url as Source);
     _player.onDurationChanged.listen((Duration duration) {
       setState(() {});
     });
-    _player.onAudioPositionChanged.listen((Duration position) {
+    _player.onDurationChanged.listen((Duration position) {
       setState(() {
         _currentPosition = position;
       });
