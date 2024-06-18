@@ -1,79 +1,89 @@
-import 'package:audioplayer/audioplayers.dart';
-import 'package:exemplo_audio_player/models/audio_model.dart';
+import 'package:exemplo_audio_player/audioplayers.dart';
+import 'package:exemplo_audio_player/model/audio_model.dart'; // Adicionando importação do AudioModel
 import 'package:flutter/material.dart';
 
 class AudioScreen extends StatefulWidget {
   final AudioModel audio;
-  const AudioScreen({super.key, required this.audio});
+  const AudioScreen({Key? key, required this.audio}) : super(key: key);
 
   @override
   State<AudioScreen> createState() => _AudioScreenState();
 }
 
 class _AudioScreenState extends State<AudioScreen> {
-  bool _isPlaying = true;
   late AudioPlayer _player;
-  Duration _duration = Duration.zero;
-  Duration _position = Duration.zero;
+  bool _isPlaying = true;
+  bool _isPaused = false;
+  Duration _currentPosition = Duration.zero;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _player = AudioPlayer();
-    _player.play(UrlSource(widget.audio.url));
+    _player.play(widget.audio.url);
+    _player.onDurationChanged.listen((Duration duration) {
+      setState(() {});
+    });
+    _player.onAudioPositionChanged.listen((Duration position) {
+      setState(() {
+        _currentPosition = position;
+      });
+    });
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _player.dispose();
     super.dispose();
   }
 
-  void _playPause() {
-    if (_isPlaying) {
-      _player.pause();
-      setState(() {
-        _isPlaying = false;
-      });
+  void _playPause() async {
+    if (_isPlaying && !_isPaused) {
+      int result = await _player.pause(); // Pausar o áudio
+      if (result == 1) { // Verificar se a pausa foi bem-sucedida
+        setState(() {
+          _isPlaying = false;
+          _isPaused = true;
+        });
+      }
     } else {
-      _player.play(UrlSource(widget.audio.url));
-      setState(() {
-        _isPlaying = true;
-      });
+      int result = await _player.resume(); // Retomar a reprodução do áudio
+      if (result == 1) { // Verificar se a retomada foi bem-sucedida
+        setState(() {
+          _isPlaying = true;
+          _isPaused = false;
+        });
+      }
     }
-  }
-
-  @override
-  void setState(VoidCallback fn) {
-    // TODO: implement setState
-    super.setState(fn);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.audio.title),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                iconSize: 60,
-                onPressed: () {
-                  _playPause();
-                },
+      appBar: AppBar(
+        title: Text(widget.audio.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: Icon(_isPlaying && !_isPaused ? Icons.pause : Icons.play_arrow),
+              iconSize: 60,
+              onPressed: _playPause,
+            ),
+            Text(
+              _isPaused ? 'Pausado' : 'Reproduzindo',
+              style: TextStyle(
+                fontSize: 20,
               ),
-              Text(_isPlaying ? 'Reproduzindo' : 'Pausado',
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ))
-            ],
-          ),
-        ));
+            ),
+            Text(
+              'Position: ${_currentPosition.inSeconds} segundos',
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

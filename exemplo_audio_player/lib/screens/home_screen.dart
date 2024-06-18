@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:exemplo_audio_player/controllers/audio_controller.dart';
 
+import '../controllers/audio_controller.dart';
 import 'audio_screen.dart';
 
 class HomeScreen extends StatefulWidget {
