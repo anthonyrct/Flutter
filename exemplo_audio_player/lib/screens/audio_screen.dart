@@ -1,5 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:exemplo_audio_player/models/audio_model.dart'; // Adicionando importação do AudioModel
+import 'package:exemplo_audio_player/models/audio_model.dart';
 import 'package:flutter/material.dart';
 
 class AudioScreen extends StatefulWidget {
@@ -12,7 +12,7 @@ class AudioScreen extends StatefulWidget {
 
 class _AudioScreenState extends State<AudioScreen> {
   late AudioPlayer _player;
-  bool _isPlaying = true;
+  bool _isPlaying = false; // Inicializei como false, pois o áudio não começa automaticamente
   bool _isPaused = false;
   Duration _currentPosition = Duration.zero;
 
@@ -20,21 +20,39 @@ class _AudioScreenState extends State<AudioScreen> {
   void initState() {
     super.initState();
     _player = AudioPlayer();
-    _player.play(widget.audio.url as Source);
-    _player.onDurationChanged.listen((Duration duration) {
-      setState(() {});
-    });
-    _player.onDurationChanged.listen((Duration position) {
-      setState(() {
-        _currentPosition = position;
-      });
-    });
+    _initAudio();
   }
 
   @override
   void dispose() {
     _player.dispose();
     super.dispose();
+  }
+
+  void _initAudio() async {
+    int result = await _player.play(widget.audio.url);
+    if (result == 1) { // 1 significa sucesso na reprodução
+      setState(() {
+        _isPlaying = true;
+      });
+    }
+    
+    _player.onDurationChanged.listen((Duration duration) {
+      setState(() {});
+    });
+
+    _player.onAudioPositionChanged.listen((Duration position) {
+      setState(() {
+        _currentPosition = position;
+      });
+    });
+
+    _player.onPlayerCompletion.listen((event) {
+      setState(() {
+        _isPlaying = false;
+        _isPaused = false;
+      });
+    });
   }
 
   void _playPause() async {
