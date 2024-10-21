@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
             ),
             Text(
               '${contador.valor}',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
           ],
         ),
