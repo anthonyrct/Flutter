@@ -358,6 +358,10 @@ Para cada risco identificado, foram elaboradas estratégias de mitigação:
 7. **Recursos Humanos:** Investir em treinamento e desenvolvimento contínuo da equipe, além de estabelecer um ambiente de trabalho positivo para retenção de talentos.
 8. **Problemas de Comunicação:** Estabelecer canais de comunicação claros e realizar reuniões regulares para manter todos na mesma página.
 
+## Designs do Figma
+
+Os designs do aplicativo estão disponíveis no Figma. Você pode acessar os arquivos de design através do link a seguir: [https://www.figma.com/design/fiLX65iIj1q2fC2ZzWkJMd/Untitled?node-id=0-1&t=zOwCTmk0YqaeKShZ-1](#).
+
 # Manual do Usuário do Aplicativo QR Code
 
 ## Introdução
